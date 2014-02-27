@@ -8,7 +8,9 @@ namespace DontKnowWhatImDoing
 {
     class Program
     {
-        private const string CharsRange = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private const string CharsRange = //"1234567890" +
+                                          //"qwertyuiopasdfghjklzxcvbnm" +
+                                          "QWERTYUIOPASDFGHJKLZXCVBNM";
         private static int XSize = 50;
         private static int YSize = 50;
         private static Cell[,] Cells;
@@ -17,8 +19,8 @@ namespace DontKnowWhatImDoing
         {
             Console.CursorVisible = false;
             // - 2 Prevents horizontal or vertical taskbar
-            Console.BufferHeight = XSize = Console.LargestWindowWidth - 2;
-            Console.BufferWidth = YSize = Console.LargestWindowHeight - 2;
+            /*Console.BufferHeight = */XSize = Console.LargestWindowWidth - 3;
+            /*Console.BufferWidth = */YSize = Console.LargestWindowHeight - 3;
             Cells = new Cell[XSize, YSize];
             Console.SetWindowSize(XSize, YSize);
             InitCells(Cells);
@@ -69,9 +71,9 @@ namespace DontKnowWhatImDoing
                     values.Add(cells[rowNum, colNum].C);
                 }
             }
-            var mostCommon = values.GroupBy(v => v).Where(g => g.Count() > 1).OrderByDescending(g => g.Count()).FirstOrDefault();
-            return mostCommon != null ? mostCommon.First() : cells[x,y].C;
-            //return (int) Math.Round(values.Average());
+            var mostCommon = values.GroupBy(v => v).OrderByDescending(g => g.Count()).FirstOrDefault();
+            //return (mostCommon != null ? mostCommon.First() : cells[x,y].C)/* + Random.Next(-1, 2)*/;
+            return (int)Math.Round(values.Average() + Random.Next(-1, 2) * 0.3);
         }
 
         private static void InitCells(Cell[,] cells)
@@ -100,7 +102,7 @@ namespace DontKnowWhatImDoing
         public static char GetRandomChar()
         {
             //int num = Random.Next(31, 127);// random letter or symbol
-            int num = Random.Next(65, 90);
+            int num = Random.Next(60, 90);
             char let = (char)(num);
             return let;
         }
