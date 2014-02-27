@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace I_Dont_Know_What_Im_doing
+namespace DontKnowWhatImDoing
 {
     class Program
     {
+        private const string CharsRange = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private static int XSize = 50;
         private static int YSize = 50;
         private static Cell[,] Cells;
@@ -25,7 +26,7 @@ namespace I_Dont_Know_What_Im_doing
             //{
             do
             {
-                RefreshCells(Cells);
+                Cells = RefreshCells(Cells);
                 PrintToConsolle(Cells);
 
                 Thread.Sleep(300);
@@ -40,17 +41,19 @@ namespace I_Dont_Know_What_Im_doing
 
         }
 
-        private static void RefreshCells(Cell[,] cells)
+        private static Cell[,] RefreshCells(Cell[,] cells)
         {
+            var newCells = new Cell[XSize, YSize];
             Enumerable.Range(0, XSize).ToList().ForEach(x => Enumerable.Range(0, YSize).ToList().ForEach(y =>
             {
-                cells[x, y].C = (char)Math.Round(Neighbourhood(cells, x, y));
+                newCells[x, y] = new Cell((char)Neighbourhood(cells, x, y));
             }));
+            return newCells;
         }
 
-        private static decimal Neighbourhood(Cell[,] cells, int x, int y)
+        private static int Neighbourhood(Cell[,] cells, int x, int y)
         {
-            List<decimal> values = new List<decimal>();
+            List<int> values = new List<int>();
 
             int startPosX = (x - 1 < 0) ? x : x - 1;
             int startPosY = (y - 1 < 0) ? y : y - 1;
@@ -66,14 +69,16 @@ namespace I_Dont_Know_What_Im_doing
                     values.Add(cells[rowNum, colNum].C);
                 }
             }
-            return values.Average();
+            var mostCommon = values.GroupBy(v => v).Where(g => g.Count() > 1).OrderByDescending(g => g.Count()).FirstOrDefault();
+            return mostCommon != null ? mostCommon.First() : cells[x,y].C;
+            //return (int) Math.Round(values.Average());
         }
 
         private static void InitCells(Cell[,] cells)
         {
             Enumerable.Range(0, XSize).ToList().ForEach(x => Enumerable.Range(0, YSize).ToList().ForEach(y =>
             {
-                cells[x, y] = new Cell(GetRandomChar());
+                cells[x, y] = new Cell(GetRandomCharacterFromRange());
             }));
         }
 
@@ -94,11 +99,15 @@ namespace I_Dont_Know_What_Im_doing
         }
         public static char GetRandomChar()
         {
-            // This method returns a Random lowercase letter.
-            // ... Between 'a' and 'z' inclusize.
-            int num = Random.Next(31, 127); // Zero to 25
+            //int num = Random.Next(31, 127);// random letter or symbol
+            int num = Random.Next(65, 90);
             char let = (char)(num);
             return let;
+        }
+        public static char GetRandomCharacterFromRange()
+        {
+            int index = Random.Next(CharsRange.Length);
+            return CharsRange[index];
         }
     }
 

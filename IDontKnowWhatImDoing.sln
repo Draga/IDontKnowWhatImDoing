@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "I Dont Know What Im doing", "I Don't Know What I'm doing\I Dont Know What Im doing.csproj", "{005D5B59-61A4-47D1-8F4D-25203AC9227B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDontKnowWhatImDoing", "I Don't Know What I'm doing\IDontKnowWhatImDoing.csproj", "{005D5B59-61A4-47D1-8F4D-25203AC9227B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
