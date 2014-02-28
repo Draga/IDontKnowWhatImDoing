@@ -13,18 +13,18 @@ namespace IDontKnowWhatImDoingPort
         public int XSize { get; private set; }
         public int YSize { get; private set; }
 
-        public readonly Cell[] Cells;
+        public readonly Cell[][] Cells;
         public Map(int xSize, int ySize)
         {
             XSize = xSize;
             YSize = ySize;
-            Cells = new Cell[XSize * YSize];
-            for (int y = 0; y < YSize; y++)
+            Cells = new Cell[XSize][];
+            for (int x = 0; x < XSize; x++)
             {
-                for (int x = 0; x < XSize; x++)
+                Cells[x] = new Cell[YSize];
+                for (int y = 0; y < YSize; y++)
                 {
-                    int i = (y * YSize) + x;
-                    Cells[i] = new Cell(null, x, y);
+                    Cells[x][y] = new Cell();
                     //Cells[i].Color = (x + y) % 2 == 0 ? Color.Red : Color.Blue;
                 }
             }
@@ -34,17 +34,15 @@ namespace IDontKnowWhatImDoingPort
         {
             XSize = original.XSize;
             YSize = original.YSize;
-            Cells = new Cell[XSize * YSize];
-            for (int i = 0; i < Cells.Length; i++)
+            Cells = new Cell[XSize][];
+            for (int x = 0; x < XSize; x++)
             {
-                Cells[i] = new Cell(new[]
-                    {
-                        original.Cells[i].Color[0],
-                        original.Cells[i].Color[1],
-                        original.Cells[i].Color[2],
-                    },
-                    original.Cells[i].X,
-                    original.Cells[i].Y);
+                Cells[x] = new Cell[YSize];
+                for (int y = 0; y < YSize; y++)
+                {
+                    Cells[x][y] = original.Cells[x][y];
+                    //Cells[i].Color = (x + y) % 2 == 0 ? Color.Red : Color.Blue;
+                }
             }
         }
 
