@@ -19,13 +19,11 @@ namespace DontKnowWhatImDoing
         {
             Console.CursorVisible = false;
             // - 2 Prevents horizontal or vertical taskbar
-            /*Console.BufferHeight = */XSize = Console.LargestWindowWidth - 3;
-            /*Console.BufferWidth = */YSize = Console.LargestWindowHeight - 3;
+            XSize = Console.LargestWindowWidth - 3;
+            YSize = Console.LargestWindowHeight - 3;
             Cells = new Cell[XSize, YSize];
             Console.SetWindowSize(XSize, YSize);
             InitCells(Cells);
-            //var loop = new Task(() =>
-            //{
             do
             {
                 Cells = RefreshCells(Cells);
@@ -38,9 +36,6 @@ namespace DontKnowWhatImDoing
                     InitCells(Cells);
                 }
             } while (true);
-            //});
-            //loop.Start();
-
         }
 
         private static Cell[,] RefreshCells(Cell[,] cells)
@@ -72,8 +67,8 @@ namespace DontKnowWhatImDoing
                 }
             }
             var mostCommon = values.GroupBy(v => v).OrderByDescending(g => g.Count()).FirstOrDefault();
-            //return (mostCommon != null ? mostCommon.First() : cells[x,y].C)/* + Random.Next(-1, 2)*/;
-            return (int)Math.Round(values.Average() + Random.Next(-1, 2) * 0.3);
+            return mostCommon != null ? (int)Math.Round(mostCommon.First() + (((double)Random.Next(-1, 2)) * 0.6)) : cells[x, y].C;
+            //return (int)Math.Round(values.Average() + Random.Next(-1, 2) * 0.3);
         }
 
         private static void InitCells(Cell[,] cells)
