@@ -126,13 +126,13 @@
                         var newMap = new Map();
                         int maxParallelism = Math.Max(1, Environment.ProcessorCount - 1);
                         int cellsPerTask = Map.XSize * Map.YSize / maxParallelism;
-                        for (int y = 0; y < Map.YSize; y++)
-                        {
-                            for (int x = 0; x < Map.XSize; x++)
+
+
+
+                        for (int i = 0; i < newMap.Cells.Length; i++)
                             {
-                                var startParallelTime = DateTime.Now;
-                                int i = (y * Map.YSize) + x;
-                                newMap.Cells[i].Color = Neighbourhood(map, x, y);
+                                //var startParallelTime = DateTime.Now;
+                                newMap.Cells[i].Color = Neighbourhood(map, map.Cells[i].X, map.Cells[i].Y);
                                 //Task.Factory.StartNew(() =>
                                 //    Parallel.For((long)0, maxParallelism,
                                 //        new ParallelOptions { MaxDegreeOfParallelism = maxParallelism },
@@ -147,7 +147,6 @@
                                 //);
                                 //Console.WriteLine("Finished parallelising, took {0}ms", DateTime.Now.Subtract(startParallelTime).Milliseconds);
                             }
-                        }
                         map = newMap;
                     };
 
