@@ -124,10 +124,28 @@
                             InitColors(map);
                         }
                         var newMap = new Map();
-                        int maxParallelism = Math.Max(1, Environment.ProcessorCount - 1);
+                        /*int maxParallelism = Math.Max(1, Environment.ProcessorCount - 1);
                         int cellsPerTask = Map.XSize * Map.YSize / maxParallelism;
 
-
+                        Map map2 = map;
+                        Task.Factory.StartNew(() =>
+                            {
+                                for (int i = 0; i < newMap.Cells.Length / 2; i++)
+                                {
+                                    newMap.Cells[i].Color = Neighbourhood(map2, map2.Cells[i].X, map2.Cells[i].Y);
+                                }
+                            });
+                        Map map1 = map;
+                        Task.Factory.StartNew(()=>
+                            {
+                                for (int i = newMap.Cells.Length / 2; i < newMap.Cells.Length; i++)
+                                {
+                                    newMap.Cells[i].Color = Neighbourhood(map1, map1.Cells[i].X, map1.Cells[i].Y);
+                                }
+                            });
+                        var startParallelTime = DateTime.Now;
+                        Task.WaitAll();
+                        Console.WriteLine("Finished parallelising, took {0}ms", DateTime.Now.Subtract(startParallelTime).Milliseconds);*/
 
                         for (int i = 0; i < newMap.Cells.Length; i++)
                             {
@@ -151,7 +169,7 @@
                     };
 
                 game.RenderFrame += (sender, e) =>
-                {
+                    {
                     // render graphics
                     GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 

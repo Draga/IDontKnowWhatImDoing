@@ -26,5 +26,18 @@ namespace IDontKnowWhatImDoingPort
                 }
             }
         }
+
+        public Map(Map original)
+        {
+            for (int i = 0; i < Cells.Length; i++)
+            {
+                Cells[i] = new Cell(original.Cells[i].Color, original.Cells[i].X, original.Cells[i].Y);
+            }
+        }
+
+        public Map Clone()
+        {
+            return new Map(this);
+        }
     }
 }
