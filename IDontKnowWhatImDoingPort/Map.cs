@@ -10,12 +10,15 @@ namespace IDontKnowWhatImDoingPort
 
     class Map
     {
-        public const int XSize = 500;
-        public const int YSize = 500;
+        public int XSize { get; private set; }
+        public int YSize { get; private set; }
 
-        public Cell[] Cells = new Cell[XSize * YSize];
-        public Map()
+        public readonly Cell[] Cells;
+        public Map(int xSize, int ySize)
         {
+            XSize = xSize;
+            YSize = ySize;
+            Cells = new Cell[XSize * YSize];
             for (int y = 0; y < YSize; y++)
             {
                 for (int x = 0; x < XSize; x++)
@@ -29,14 +32,17 @@ namespace IDontKnowWhatImDoingPort
 
         public Map(Map original)
         {
+            XSize = original.XSize;
+            YSize = original.YSize;
+            Cells = new Cell[XSize * YSize];
             for (int i = 0; i < Cells.Length; i++)
             {
                 Cells[i] = new Cell(new[]
-                {
-                    original.Cells[i].Color[0],
-                    original.Cells[i].Color[1],
-                    original.Cells[i].Color[2],
-                },
+                    {
+                        original.Cells[i].Color[0],
+                        original.Cells[i].Color[1],
+                        original.Cells[i].Color[2],
+                    },
                     original.Cells[i].X,
                     original.Cells[i].Y);
             }
