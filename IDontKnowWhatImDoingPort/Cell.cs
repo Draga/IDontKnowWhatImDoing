@@ -12,17 +12,23 @@ namespace IDontKnowWhatImDoingPort
 
     class Cell
     {
-        public Color Color;
+        //public Color Color;
 
-        public int X;
+        public byte [] Color = new byte[3];
 
-        public int Y;
+        public readonly int X;
 
-        public Cell(Color color, int x, int y)
+        public readonly int Y;
+
+        public Cell(byte[] color, int x, int y)
         {
             Color = color;
             X = x;
             Y = y;
+        }
+
+        public Cell(int x, int y) : this(new byte[3], x, y)
+        {
         }
     }
 }

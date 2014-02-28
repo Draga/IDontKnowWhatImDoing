@@ -18,86 +18,22 @@
     {
         private static GLControl GlControl = new GLControl();
 
-        private static double angle;
+        private static Map map = new Map();
 
-        private static Color FirstVertexColor = Color.MidnightBlue;
+        private static double angle;
 
         private static Random Rnd = new Random();
 
         private static readonly object MapLock = new object();
 
-        #region private void Render()
+        #region Render
 
-        private static void Render()
-        {
-            Matrix4 lookat = Matrix4.LookAt(0, 5, 5, 0, 0, 0, 0, 1, 0);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref lookat);
-
-            GL.Rotate(angle, 0.0f, 1.0f, 0.0f);
-            angle += 0.5f;
-
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            DrawCube();
-
-            GlControl.SwapBuffers();
-        }
-
-        #endregion
-
-        #region private void DrawCube()
-
-        private static void DrawCube()
-        {
-            GL.Begin(BeginMode.Quads);
-
-            GL.Color3(Color.Silver);
-            GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            GL.Vertex3(1.0f, 1.0f, -1.0f);
-            GL.Vertex3(1.0f, -1.0f, -1.0f);
-
-            GL.Color3(Color.Honeydew);
-            GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.Vertex3(1.0f, -1.0f, -1.0f);
-            GL.Vertex3(1.0f, -1.0f, 1.0f);
-            GL.Vertex3(-1.0f, -1.0f, 1.0f);
-
-            GL.Color3(Color.Moccasin);
-
-            GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.Vertex3(-1.0f, -1.0f, 1.0f);
-            GL.Vertex3(-1.0f, 1.0f, 1.0f);
-            GL.Vertex3(-1.0f, 1.0f, -1.0f);
-
-            GL.Color3(Color.IndianRed);
-            GL.Vertex3(-1.0f, -1.0f, 1.0f);
-            GL.Vertex3(1.0f, -1.0f, 1.0f);
-            GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.Vertex3(-1.0f, 1.0f, 1.0f);
-
-            GL.Color3(Color.PaleVioletRed);
-            GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            GL.Vertex3(-1.0f, 1.0f, 1.0f);
-            GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.Vertex3(1.0f, 1.0f, -1.0f);
-
-            GL.Color3(Color.ForestGreen);
-            GL.Vertex3(1.0f, -1.0f, -1.0f);
-            GL.Vertex3(1.0f, 1.0f, -1.0f);
-            GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.Vertex3(1.0f, -1.0f, 1.0f);
-
-            GL.End();
-        }
 
         #endregion
 
         [STAThread]
         public static void Main()
         {
-            var map = new Map();
             using (var game = new GameWindow())
             {
                 game.Load += (sender, e) =>
@@ -113,63 +49,63 @@
                 };
 
                 game.UpdateFrame += (sender, e) =>
+                {
+                    // add game logic, input handling
+                    if (game.Keyboard[Key.Escape])
                     {
-                        // add game logic, input handling
-                        if (game.Keyboard[Key.Escape])
-                        {
-                            game.Exit();
-                        }
-                        if (game.Keyboard[Key.Enter])
-                        {
-                            InitColors(map);
-                        }
-                        var newMap = new Map();
-                        /*int maxParallelism = Math.Max(1, Environment.ProcessorCount - 1);
-                        int cellsPerTask = Map.XSize * Map.YSize / maxParallelism;
+                        game.Exit();
+                    }
+                    if (game.Keyboard[Key.Enter])
+                    {
+                        InitColors(map);
+                    }
+                    var newMap = new Map();
+                    /*int maxParallelism = Math.Max(1, Environment.ProcessorCount - 1);
+            int cellsPerTask = Map.XSize * Map.YSize / maxParallelism;
 
-                        Map map2 = map;
-                        Task.Factory.StartNew(() =>
-                            {
-                                for (int i = 0; i < newMap.Cells.Length / 2; i++)
-                                {
-                                    newMap.Cells[i].Color = Neighbourhood(map2, map2.Cells[i].X, map2.Cells[i].Y);
-                                }
-                            });
-                        Map map1 = map;
-                        Task.Factory.StartNew(()=>
-                            {
-                                for (int i = newMap.Cells.Length / 2; i < newMap.Cells.Length; i++)
-                                {
-                                    newMap.Cells[i].Color = Neighbourhood(map1, map1.Cells[i].X, map1.Cells[i].Y);
-                                }
-                            });
-                        var startParallelTime = DateTime.Now;
-                        Task.WaitAll();
-                        Console.WriteLine("Finished parallelising, took {0}ms", DateTime.Now.Subtract(startParallelTime).Milliseconds);*/
+            Map map2 = map;
+            Task.Factory.StartNew(() =>
+                {
+                    for (int i = 0; i < newMap.Cells.Length / 2; i++)
+                    {
+                        newMap.Cells[i].Color = Neighbourhood(map2, map2.Cells[i].X, map2.Cells[i].Y);
+                    }
+                });
+            Map map1 = map;
+            Task.Factory.StartNew(()=>
+                {
+                    for (int i = newMap.Cells.Length / 2; i < newMap.Cells.Length; i++)
+                    {
+                        newMap.Cells[i].Color = Neighbourhood(map1, map1.Cells[i].X, map1.Cells[i].Y);
+                    }
+                });
+            var startParallelTime = DateTime.Now;
+            Task.WaitAll();
+            Console.WriteLine("Finished parallelising, took {0}ms", DateTime.Now.Subtract(startParallelTime).Milliseconds);*/
 
-                        for (int i = 0; i < newMap.Cells.Length; i++)
-                            {
-                                //var startParallelTime = DateTime.Now;
-                                newMap.Cells[i].Color = Neighbourhood(map, map.Cells[i].X, map.Cells[i].Y);
-                                //Task.Factory.StartNew(() =>
-                                //    Parallel.For((long)0, maxParallelism,
-                                //        new ParallelOptions { MaxDegreeOfParallelism = maxParallelism },
-                                //        (taskIndex) =>
-                                //        {
-                                //            for (long i = taskIndex * cellsPerTask; i < (taskIndex + 1) * cellsPerTask; i++)
-                                //            {
-                                //                newMap.Cells[i].Color = Neighbourhood(map, map.Cells[i].X, map.Cells[i].Y);
-                                //            }
-                                //            //Console.WriteLine("Task {0} has finished...", taskIndex);
-                                //        })
-                                //);
-                                //Console.WriteLine("Finished parallelising, took {0}ms", DateTime.Now.Subtract(startParallelTime).Milliseconds);
-                            }
-                        map = newMap;
-                    };
+                    for (int i = 0; i < newMap.Cells.Length; i++)
+                    {
+                        //var startParallelTime = DateTime.Now;
+                        newMap.Cells[i].Color = Neighbourhood(map, map.Cells[i].X, map.Cells[i].Y);
+                        //Task.Factory.StartNew(() =>
+                        //    Parallel.For((long)0, maxParallelism,
+                        //        new ParallelOptions { MaxDegreeOfParallelism = maxParallelism },
+                        //        (taskIndex) =>
+                        //        {
+                        //            for (long i = taskIndex * cellsPerTask; i < (taskIndex + 1) * cellsPerTask; i++)
+                        //            {
+                        //                newMap.Cells[i].Color = Neighbourhood(map, map.Cells[i].X, map.Cells[i].Y);
+                        //            }
+                        //            //Console.WriteLine("Task {0} has finished...", taskIndex);
+                        //        })
+                        //);
+                        //Console.WriteLine("Finished parallelising, took {0}ms", DateTime.Now.Subtract(startParallelTime).Milliseconds);
+                    }
+                    map = newMap;
+                };
 
                 game.RenderFrame += (sender, e) =>
-                    {
+                {
                     // render graphics
                     GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
@@ -187,7 +123,8 @@
                         for (int x = 0; x < Map.XSize; x++)
                         {
                             var cell = map.Cells[(y * Map.YSize) + x];
-                            var bottomLeft = new Vector2(cellWidth * x / game.Width, cellHeight * y / game.Height);
+                            var bottomLeft = new Vector2(cellWidth * x / game.Width,
+                                cellHeight * y / game.Height);
                             var bottomRight = new Vector2(
                                 cellWidth * (x + 1) / game.Width,
                                 cellHeight * y / game.Height);
@@ -210,7 +147,11 @@
 
                     GL.End();
                     game.SwapBuffers();
-                    game.Title = string.Format("FPS: {0} | Cells: {1}", game.RenderFrequency, (Map.XSize * Map.YSize).ToString("N0"));
+                    game.Title =
+                        string.Format(
+                            "FPS: {0} | Cells: {1} | Render Time: {2} | Update Time: {3}",
+                            game.RenderFrequency, (Map.XSize * Map.YSize).ToString("N0"),
+                            game.RenderTime, game.UpdateTime);
                 };
 
                 // Run the game at 60 updates per second
@@ -223,12 +164,13 @@
             var colorConverter = new ColorConverter();
             for (int i = 0; i < Map.XSize * Map.YSize; i++)
             {
-                map.Cells[i].Color = Color.FromArgb(Rnd.Next(0, 255), Rnd.Next(0, 255), Rnd.Next(0, 255));
+                //map.Cells[i].Color = Color.FromArgb(Rnd.Next(0, 255), Rnd.Next(0, 255), Rnd.Next(0, 255));
+                map.Cells[i].Color = new[] { (byte)Rnd.Next(0, 255), (byte)Rnd.Next(0, 255), (byte)Rnd.Next(0, 255) };
             }
         }
-        private static Color Neighbourhood(Map map, int x, int y)
+        private static byte[] Neighbourhood(Map map, int x, int y)
         {
-            Color[] values = new Color[9];
+            int[] values = new int[3];
 
             int startPosX = (x - 1 < 0) ? x : x - 1;
             int startPosY = (y - 1 < 0) ? y : y - 1;
@@ -240,11 +182,18 @@
             int arrayIndex = 0;
             for (int rowNum = startPosX; rowNum <= endPosX; rowNum++)
             {
-                for (int colNum = startPosY; colNum <= endPosY; colNum++, arrayIndex++)
+                for (int colNum = startPosY; colNum <= endPosY; colNum++)
                 {
-                    values[arrayIndex] = map.Cells[(rowNum * Map.YSize) + colNum].Color;
+                    values[0] += map.Cells[(rowNum * Map.YSize) + colNum].Color[0];
+                    values[1] += map.Cells[(rowNum * Map.YSize) + colNum].Color[1];
+                    values[2] += map.Cells[(rowNum * Map.YSize) + colNum].Color[2];
+                    arrayIndex++;
                 }
             }
+            values[0] += map.Cells[(y * Map.YSize) + x].Color[0];
+            values[1] += map.Cells[(y * Map.YSize) + x].Color[1];
+            values[2] += map.Cells[(y * Map.YSize) + x].Color[2];
+            arrayIndex++;
             //var mostCommon = values.GroupBy(v => v).OrderByDescending(g => g.Count()).FirstOrDefault();
             //return mostCommon != null ? (int)Math.Round(mostCommon.First() + (((double)Random.Next(-1, 2)) * 0.6)) : cells[x, y].C;
             //int average = 0;
@@ -253,7 +202,21 @@
             //    average += values[i].ToArgb();
             //}
             //average = (int)Math.Round(average / ((double)arrayIndex + 1));
-            return Color.FromArgb((int)Math.Round(values.Select(v => v.ToArgb()).Average()));
+            
+            // Last increment to make it rapresent the count not the index
+            arrayIndex++;
+            //return new[]
+            //{
+            //    (byte)(values[0] > (255f / 2f * arrayIndex) ? 255 : 0),
+            //    (byte)(values[1] > (255f / 2f * arrayIndex) ? 255 : 0),
+            //    (byte)(values[2] > (255f / 2f * arrayIndex) ? 255 : 0),
+            //};
+            return new[]
+            {
+                (byte)Math.Round((decimal)values[0]/(decimal)arrayIndex),
+                (byte)Math.Round((decimal)values[1]/(decimal)arrayIndex),
+                (byte)Math.Round((decimal)values[2]/(decimal)arrayIndex),
+            };
         }
     }
 }

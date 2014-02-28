@@ -21,7 +21,7 @@ namespace IDontKnowWhatImDoingPort
                 for (int x = 0; x < XSize; x++)
                 {
                     int i = (y * YSize) + x;
-                    Cells[i] = new Cell(new Color(), x, y);
+                    Cells[i] = new Cell(null, x, y);
                     //Cells[i].Color = (x + y) % 2 == 0 ? Color.Red : Color.Blue;
                 }
             }
@@ -31,7 +31,14 @@ namespace IDontKnowWhatImDoingPort
         {
             for (int i = 0; i < Cells.Length; i++)
             {
-                Cells[i] = new Cell(original.Cells[i].Color, original.Cells[i].X, original.Cells[i].Y);
+                Cells[i] = new Cell(new[]
+                {
+                    original.Cells[i].Color[0],
+                    original.Cells[i].Color[1],
+                    original.Cells[i].Color[2],
+                },
+                    original.Cells[i].X,
+                    original.Cells[i].Y);
             }
         }
 
