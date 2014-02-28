@@ -1,22 +1,70 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDontKnowWhatImDoing", "I Don't Know What I'm doing\IDontKnowWhatImDoing.csproj", "{005D5B59-61A4-47D1-8F4D-25203AC9227B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDontKnowWhatImDoingPort", "IDontKnowWhatImDoingPort\IDontKnowWhatImDoingPort.csproj", "{8413A0D1-5383-461D-8CAE-FA1A824F25AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTK", "..\..\..\OpenTK\1.1\Source\OpenTK\OpenTK.csproj", "{A37A7E14-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTK.GLControl", "..\..\..\OpenTK\1.1\Source\GLControl\OpenTK.GLControl.csproj", "{A625BE88-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTK.Examples", "..\..\..\OpenTK\1.1\Source\Examples\OpenTK.Examples.csproj", "{868E37B3-0000-0000-0000-000000000000}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Documentation|Any CPU = Documentation|Any CPU
+		Nsis|Any CPU = Nsis|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{005D5B59-61A4-47D1-8F4D-25203AC9227B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{005D5B59-61A4-47D1-8F4D-25203AC9227B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{005D5B59-61A4-47D1-8F4D-25203AC9227B}.Documentation|Any CPU.ActiveCfg = Debug|Any CPU
+		{005D5B59-61A4-47D1-8F4D-25203AC9227B}.Documentation|Any CPU.Build.0 = Debug|Any CPU
+		{005D5B59-61A4-47D1-8F4D-25203AC9227B}.Nsis|Any CPU.ActiveCfg = Release|Any CPU
+		{005D5B59-61A4-47D1-8F4D-25203AC9227B}.Nsis|Any CPU.Build.0 = Release|Any CPU
 		{005D5B59-61A4-47D1-8F4D-25203AC9227B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{005D5B59-61A4-47D1-8F4D-25203AC9227B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8413A0D1-5383-461D-8CAE-FA1A824F25AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8413A0D1-5383-461D-8CAE-FA1A824F25AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8413A0D1-5383-461D-8CAE-FA1A824F25AA}.Documentation|Any CPU.ActiveCfg = Debug|Any CPU
+		{8413A0D1-5383-461D-8CAE-FA1A824F25AA}.Documentation|Any CPU.Build.0 = Debug|Any CPU
+		{8413A0D1-5383-461D-8CAE-FA1A824F25AA}.Nsis|Any CPU.ActiveCfg = Release|Any CPU
+		{8413A0D1-5383-461D-8CAE-FA1A824F25AA}.Nsis|Any CPU.Build.0 = Release|Any CPU
+		{8413A0D1-5383-461D-8CAE-FA1A824F25AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8413A0D1-5383-461D-8CAE-FA1A824F25AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A37A7E14-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A37A7E14-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A37A7E14-0000-0000-0000-000000000000}.Documentation|Any CPU.ActiveCfg = Documentation|Any CPU
+		{A37A7E14-0000-0000-0000-000000000000}.Documentation|Any CPU.Build.0 = Documentation|Any CPU
+		{A37A7E14-0000-0000-0000-000000000000}.Nsis|Any CPU.ActiveCfg = Nsis|Any CPU
+		{A37A7E14-0000-0000-0000-000000000000}.Nsis|Any CPU.Build.0 = Nsis|Any CPU
+		{A37A7E14-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A37A7E14-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A625BE88-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A625BE88-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A625BE88-0000-0000-0000-000000000000}.Documentation|Any CPU.ActiveCfg = Documentation|Any CPU
+		{A625BE88-0000-0000-0000-000000000000}.Documentation|Any CPU.Build.0 = Documentation|Any CPU
+		{A625BE88-0000-0000-0000-000000000000}.Nsis|Any CPU.ActiveCfg = Nsis|Any CPU
+		{A625BE88-0000-0000-0000-000000000000}.Nsis|Any CPU.Build.0 = Nsis|Any CPU
+		{A625BE88-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A625BE88-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{868E37B3-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{868E37B3-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{868E37B3-0000-0000-0000-000000000000}.Documentation|Any CPU.ActiveCfg = Documentation|Any CPU
+		{868E37B3-0000-0000-0000-000000000000}.Documentation|Any CPU.Build.0 = Documentation|Any CPU
+		{868E37B3-0000-0000-0000-000000000000}.Nsis|Any CPU.ActiveCfg = Nsis|Any CPU
+		{868E37B3-0000-0000-0000-000000000000}.Nsis|Any CPU.Build.0 = Nsis|Any CPU
+		{868E37B3-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{868E37B3-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Source\Examples\OpenTK.Examples.csproj
 	EndGlobalSection
 EndGlobal
