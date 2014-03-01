@@ -4,7 +4,9 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Drawing;
+    using System.IO;
     using System.Linq;
+    using System.Runtime.Serialization.Formatters.Binary;
     using System.Security.Cryptography;
     using System.Threading.Tasks;
     using System.Windows.Forms;
@@ -19,6 +21,11 @@
     [UsedImplicitly]
     class IDontKnowWhatImDoing : GameWindow
     {
+        private static bool ShowingCustomTitle = false;
+
+        private static string CustomTitle = String.Empty;
+        private static DateTime ShowingCustomTitleUntill;
+        const string FileName = @"..\..\map.bin";
         private const int XSize = 200;
         private const int YSize = 200;
         private static Map map = new Map(XSize, YSize);
@@ -33,6 +40,8 @@
                                                   };
 
         private static readonly Random Rnd = new Random();
+
+        private static RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
 
         [STAThread]
         public static void Main()
@@ -59,7 +68,7 @@
                 game.RenderFrame += OnRender;
 
                 // Run the game at 60 updates per second
-                game.Run(60);
+                game.Run(3, 1);
             }
         }
 
@@ -107,14 +116,25 @@
                     GL.Vertex2(bottomLeft);
                 }
             }
-
             GL.End();
             game.SwapBuffers();
-            game.Title =
-                string.Format(
+            if (ShowingCustomTitle)
+            {
+                if (ShowingCustomTitleUntill < DateTime.Now)
+                {
+                    ShowingCustomTitle = false;
+                }
+                game.Title = CustomTitle;
+            }
+            else
+            {
+                game.Title = string.Format(
                     "FPS: {0} | Cells: {1} | Render Time: {2} | Update Time: {3}",
-                    game.RenderFrequency.ToString("0.0000"), (XSize * YSize).ToString("N0"),
-                    game.RenderTime.ToString("0.0000"), game.UpdateTime.ToString("0.0000"));
+                    game.RenderFrequency.ToString("0.0000"),
+                    (XSize * YSize).ToString("N0"),
+                    game.RenderTime.ToString("0.0000"),
+                    game.UpdateTime.ToString("0.0000"));
+            }
         }
         #endregion
 
@@ -135,6 +155,30 @@
             {
                 game.Width = map.XSize;
                 game.Height = map.YSize;
+            }
+            if (game.Keyboard[Key.S])
+            {
+                Stream TestFileStream = File.Create(FileName);
+                BinaryFormatter serializer = new BinaryFormatter();
+                serializer.Serialize(TestFileStream, map);
+                TestFileStream.Close();
+
+                ShowingCustomTitle = true;
+                ShowingCustomTitleUntill = DateTime.Now.AddSeconds(5);
+                CustomTitle = "Saved!";
+            }
+            if (game.Keyboard[Key.L])
+            {
+                if (File.Exists(FileName))
+                {
+                    Stream TestFileStream = File.OpenRead(FileName);
+                    BinaryFormatter deserializer = new BinaryFormatter();
+                    map = (Map)deserializer.Deserialize(TestFileStream);
+                    TestFileStream.Close();
+                }
+                ShowingCustomTitle = true;
+                ShowingCustomTitleUntill = DateTime.Now.AddSeconds(5);
+                CustomTitle = "Loaded!";
             }
             int maxParallelism = Math.Max(1, Environment.ProcessorCount - 1);
             int rowsPerTask = XSize / maxParallelism;
@@ -189,6 +233,16 @@
         }
         private static byte[] Neighbourhood(Map map, int x, int y)
         {
+            // Rebel
+            var isRebelCell = false;
+            byte[] randomByte = new byte[3];
+            rngCsp.GetNonZeroBytes(randomByte);
+            if ((randomByte[0] * randomByte[1]) == (255 * 255))
+            {
+                rngCsp.GetBytes(randomByte);
+                return Colors[randomByte[0] % Colors.Count];
+                isRebelCell = true;
+            }
             List<byte[]> values = new List<byte[]>(9);
 
             int startPosX = (x - 1 < 0) ? x : x - 1;
@@ -211,8 +265,8 @@
                 }
             }
 
-            Color fromArgb = Color.FromArgb((int)Math.Round(values.Select(v=>new Color4(v[0],v[1],v[2],255).ToArgb()).Average()));
-            return new[] { fromArgb.R, fromArgb.G, fromArgb.B};
+            Color fromArgb = Color.FromArgb((int)Math.Round(values.Select(v => new Color4(v[0], v[1], v[2], 255).ToArgb()).Average()));
+            return new[] { fromArgb.R, fromArgb.G, fromArgb.B };
 
             var mostCommon = Colors.Select(c => new { ColorTriple = c, Count = values.Count(v => v == c) })
                 .OrderByDescending(g => g.Count).ToArray();

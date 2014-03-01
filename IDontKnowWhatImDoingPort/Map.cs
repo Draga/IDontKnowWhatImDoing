@@ -8,6 +8,7 @@ namespace IDontKnowWhatImDoingPort
 {
     using System.Drawing;
 
+    [Serializable]
     class Map
     {
         public int XSize { get; private set; }
